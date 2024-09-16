@@ -9,7 +9,7 @@ import (
 
 func DownloadFile(url string, dest string) error {
 	resp, err := http.Get(url)
-	if err != nil || resp.StatusCode != http.StatusOK {
+	if err != nil {
 		return fmt.Errorf("Failed to download file from URL: %w", err)
 	}
 	defer resp.Body.Close()
