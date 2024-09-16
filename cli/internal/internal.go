@@ -10,25 +10,22 @@ import (
 )
 
 type CliRunResult struct {
-	Stdout string
-	Stderr string
-	Error  error
+	ShellOutput string
+	Error       error
 }
 
 // Helper function to simulate CLI execution
 func ExecuteTestCommand(cmdGetter models.JocastaCommandFunction, args ...string) CliRunResult {
-	bufStdout := new(bytes.Buffer)
-	bufStderr := new(bytes.Buffer)
+	buf := new(bytes.Buffer)
 	cmd := cmdGetter()
-	cmd.SetOut(bufStdout)
-	cmd.SetErr(bufStderr)
+	cmd.SetOut(buf)
+	cmd.SetErr(buf)
 	cmd.SetArgs(args)
 
 	_, err := cmd.ExecuteC()
 	return CliRunResult{
-		Stdout: bufStdout.String(),
-		Stderr: bufStderr.String(),
-		Error:  err,
+		ShellOutput: buf.String(),
+		Error:       err,
 	}
 }
 

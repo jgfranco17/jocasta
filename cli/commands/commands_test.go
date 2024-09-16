@@ -18,7 +18,7 @@ func assertFileExists(t *testing.T, filePath string) {
 func TestCopyCommandHelp(t *testing.T) {
 	output := internal.ExecuteTestCommand(GetCopyCommand, "--help")
 	assert.NoError(t, output.Error)
-	assert.Contains(t, output.Stdout, "copy [flags]", "Did not find usage guide for copy command")
+	assert.Contains(t, output.ShellOutput, "copy [flags]", "Did not find usage guide for copy command")
 }
 
 func TestCopyCommandNotEnoughArgs(t *testing.T) {
