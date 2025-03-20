@@ -6,12 +6,24 @@ import (
 	"os"
 	"path/filepath"
 
+	"cli/models"
+
 	"github.com/spf13/cobra"
 )
 
 var (
-	failFast bool
+	failFast  bool
+	configDir string
 )
+
+func init() {
+	pathFromEnv, isEnvSet := os.LookupEnv(EnvConfigPath)
+	if isEnvSet && pathFromEnv != "" {
+		configDir = pathFromEnv
+	} else {
+		configDir = filepath.Join(os.Getenv("HOME"), ".jocasta")
+	}
+}
 
 func GetListCommand() *cobra.Command {
 	var count int
@@ -23,17 +35,12 @@ func GetListCommand() *cobra.Command {
 			ctx, cancel := context.WithCancel(context.Background())
 			defer cancel()
 
-			homeDir, err := os.UserHomeDir()
-			if err != nil {
-				return fmt.Errorf("Failed to identify home directory: %w", err)
-			}
-
-			filepath := filepath.Join(homeDir, projectAppDirectory, "tasks.json")
-			err = createFile(filepath, "{}")
+			filepath := filepath.Join(configDir, "tasks.json")
+			err := createFile(filepath, "{}")
 			if err != nil {
 				return fmt.Errorf("Failed to create tasks file: %w", err)
 			}
-			taskCollection, err := LoadTaskCollectionFromFile(ctx, filepath)
+			taskCollection, err := models.LoadTaskCollectionFromFile(ctx, filepath)
 			if err != nil {
 				return fmt.Errorf("Error loading task collection: %w", err)
 			}

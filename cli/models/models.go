@@ -1,4 +1,4 @@
-package core
+package models
 
 import (
 	"context"
@@ -7,6 +7,8 @@ import (
 	"io"
 	"os"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type Task struct {
@@ -48,6 +50,7 @@ func (tc *TaskCollection) Add(taskDescription string) error {
 		Description: taskDescription,
 	}
 	tc.Tasks[taskId] = newTask
+	log.Infof(`Added task: "%s"`, taskDescription)
 	return nil
 }
 
