@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"cli/env"
 	"cli/models"
 
 	"github.com/spf13/cobra"
@@ -17,12 +18,7 @@ var (
 )
 
 func init() {
-	pathFromEnv, isEnvSet := os.LookupEnv(EnvConfigPath)
-	if isEnvSet && pathFromEnv != "" {
-		configDir = pathFromEnv
-	} else {
-		configDir = filepath.Join(os.Getenv("HOME"), ".jocasta")
-	}
+	configDir = env.GetConfigPathFromEnv()
 }
 
 func GetListCommand() *cobra.Command {

@@ -1,6 +1,7 @@
 package core
 
 import (
+	"cli/env"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -18,10 +19,7 @@ func fileExists(path string) bool {
 }
 
 func FindAppDirectory() (string, error) {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return "", fmt.Errorf("Failed to identify home directory: %w", err)
-	}
+	homeDir := env.GetConfigPathFromEnv()
 	appDir := filepath.Join(homeDir, projectAppDirectory)
 	if !fileExists(appDir) {
 		err := os.MkdirAll(appDir, 0755)
